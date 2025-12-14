@@ -1,0 +1,334 @@
+<mujoco model="UBotModule">
+
+	<visual>
+		<global fovy="10" />
+		<rgba haze="0.15 0.25 0.35 1" />
+		<quality shadowsize="8192" />
+		<map stiffness="700" shadowscale="1" fogstart="10" fogend="15" zfar="40" haze="0.3" />
+	</visual>
+
+	<compiler inertiafromgeom="auto" angle="degree" balanceinertia="true" boundmass="0.001"
+		boundinertia="0.001"></compiler>
+	<option timestep="0.005" iterations="50" solver="Newton" tolerance="1e-10" />
+	<size njmax="500" nconmax="100" nstack="2000" />
+	<default>
+		<joint limited="true" damping="0" armature="0.1" stiffness="0" range="-90 90" ></joint>
+		<geom contype="1" type="mesh" conaffinity="1" condim="3" margin="0.0001" solref=".02 1"
+			solimp=".9 .95 .001 0.5 1"></geom>
+		<mesh scale="1 1 1" />
+		<position kp="100" />
+		<camera pos="0.332 -0.105 0.364" xyaxes="0.140 0.990 0.000 -0.689 0.098 0.719" />
+	</default>
+
+	<asset>
+		<texture type="skybox" builtin="gradient" rgb1="0.6 0.6 0.6" rgb2="0 0 0" width="512"
+			height="512" />
+		<mesh name="ma" file="./ma.obj" />
+		<mesh name="mb" file="./mb.obj" />
+		<mesh name="ax" file="./ax.obj" />
+		<texture type="skybox" builtin="gradient" rgb1="0.3 0.5 0.7" rgb2="0 0 0" width="512"
+			height="512" />
+		<texture name="texplane" type="2d" builtin="checker" rgb1=".2 .3 .4" rgb2=".1 0.15 0.2"
+			width="512" height="512" mark="cross" markrgb=".8 .8 .8" />
+		<texture name="texcarpet" type="2d" file="carpet.png" />
+		<texture name="texsponge" type="2d" file="sponge.png" />
+		<texture name="texmarble" type="cube" file="marble.png" />
+		<texture name="texgeom" type="cube" builtin="flat" mark="cross" width="127" height="1278"
+			rgb1="0.8 0.6 0.4" rgb2="0.8 0.6 0.4" markrgb="1 1 1" random="0.01"></texture>
+		<material name="geom" texture="texgeom" texuniform="true"></material>
+		<material name="matplane" reflectance="0.3" texture="texplane" texrepeat="5 5"
+			texuniform="true" />
+		<material name="matcarpet" texture="texcarpet" />
+		<material name="matsponge" texture="texsponge" specular="0.3" />
+		<material name="matmarble" texture="texmarble" rgba=".7 .7 .7 1" />
+		<material name="ma" specular="1" shininess="1" emission="0"
+			rgba="0.5119999961853026 0.0 0.0 1.0" />
+		<material name="mb" specular="1" shininess="1" />
+	</asset>
+
+	<worldbody>
+		<geom name="ground" type="plane" size="0 0 1" pos="0 0 0" quat="1 0 0 0" rgba="1 1 1 1"
+			material="matplane" contype="127" conaffinity="127" condim="1" />
+		<light directional="true" diffuse="1.0 1.0 1.0" specular=".1 .1 .1" pos="0.0 0.0 1"
+			dir="0 0 -1" />
+
+		<!--light directional="false" diffuse="1.0 1.0 1.0" specular=".1 .1 .1" pos="-1 -1 1" dir="1
+		1 -1"/-->
+		<body name="ma_0" pos="0.0 0.0 0.04" euler="90 90 0">
+			<geom name="ma_0" mesh="ma" material="ma" rgba="0.5 0.0 0.0 1.0" contype="1"
+				conaffinity="1" />
+			<inertial pos="0        0        0" mass="0.2" />
+			<freejoint name="root" />
+			<body name="ax_0" pos="0.0 0.0 0.0">
+				<geom name="ax_0" mesh="ax" rgba="0.5 0.5 0.7 1" contype="2" conaffinity="2" />
+				<inertial pos="0        0        0" mass="0.02" />
+				<joint name="axis1_0" axis="1        0        0" />
+				<body name="mb_0" pos="0.0 0.0 0.0">
+					<geom name="mb_0" mesh="mb" material="mb" rgba="0.5 0.0 0.0 1" contype="4"
+						conaffinity="4" />
+					<inertial pos="0        0        0" mass="0.2" />
+					<joint name="axis2_0" type="hinge" axis="0        0        1" />
+					<body name="ma_1" pos="0.0 0.0 0.08" euler="0 0 0">
+						<geom name="ma_1" mesh="ma" material="ma" rgba="0.0 0.5 0.0 1" contype="8"
+							conaffinity="8" />
+						<inertial pos="0        0        0" mass="0.2" />
+						<body name="ax_1" pos="0.0 0.0 0.0">
+							<geom name="ax_1" type="mesh" mesh="ax" rgba="0.5 0.5 0.7 1"
+								contype="16" conaffinity="16" />
+							<inertial pos="0        0        0" mass="0.02" />
+							<joint name="axis1_1" axis="1        0        0" />
+							<body name="mb_1" pos="0.0 0.0 0.0">
+								<geom name="mb_1" type="mesh" mesh="mb" material="mb"
+									rgba="0.0 0.5 0.0 1" contype="32" conaffinity="32" />
+								<inertial pos="0        0        0" mass="0.2" />
+								<joint name="axis2_1" axis="0        0        1" />
+								<body name="ma_2" pos="0.0 0.0 0.08" euler="0 0 0">
+									<geom name="ma_2" mesh="ma" material="ma" rgba="0.5 0.0 0.0 1"
+										contype="8" conaffinity="8" />
+									<inertial pos="0        0        0" mass="0.2" />
+									<body name="ax_2" pos="0.0 0.0 0.0">
+										<geom name="ax_2" type="mesh" mesh="ax" rgba="0.5 0.5 0.7 1"
+											contype="16" conaffinity="16" />
+										<inertial pos="0        0        0" mass="0.02" />
+										<joint name="axis1_2" axis="1        0        0" />
+										<body name="mb_2" pos="0.0 0.0 0.0">
+											<geom name="mb_2" type="mesh" mesh="mb" material="mb"
+												rgba="0.5 0.0 0.0 1" contype="32" conaffinity="32" />
+											<inertial pos="0        0        0" mass="0.2" />
+											<joint name="axis2_2" axis="0        0        1" />
+											<body name="ma_3" pos="0.0 0.0 0.08" euler="0 0 0">
+												<geom name="ma_3" mesh="ma" material="ma"
+													rgba="0.0 0.5 0.0 1" contype="8" conaffinity="8" />
+												<inertial pos="0        0        0" mass="0.2" />
+												<body name="ax_3" pos="0.0 0.0 0.0">
+													<geom name="ax_3" type="mesh" mesh="ax"
+														rgba="0.5 0.5 0.7 1" contype="16"
+														conaffinity="16" />
+													<inertial pos="0        0        0" mass="0.02" />
+													<joint name="axis1_3" axis="1        0        0" />
+													<body name="mb_3" pos="0.0 0.0 0.0">
+														<geom name="mb_3" type="mesh" mesh="mb"
+															material="mb" rgba="0.0 0.5 0.0 1"
+															contype="32" conaffinity="32" />
+														<inertial pos="0        0        0"
+															mass="0.2" />
+														<joint name="axis2_3"
+															axis="0        0        1" />
+														<body name="ma_4" pos="0.0 0.0 0.08"
+															euler="0 0 0">
+															<geom name="ma_4" mesh="ma"
+																material="ma" rgba="0.5 0.0 0.0 1"
+																contype="8" conaffinity="8" />
+															<inertial pos="0        0        0"
+																mass="0.2" />
+															<body name="ax_4" pos="0.0 0.0 0.0">
+																<geom name="ax_4" type="mesh"
+																	mesh="ax" rgba="0.5 0.5 0.7 1"
+																	contype="16" conaffinity="16" />
+																<inertial pos="0        0        0"
+																	mass="0.02" />
+																<joint name="axis1_4"
+																	axis="1        0        0" />
+																<body name="mb_4" pos="0.0 0.0 0.0">
+																	<geom name="mb_4" type="mesh"
+																		mesh="mb" material="mb"
+																		rgba="0.5 0.0 0.0 1"
+																		contype="32"
+																		conaffinity="32" />
+																	<inertial
+																		pos="0        0        0"
+																		mass="0.2" />
+																	<joint name="axis2_4"
+																		axis="0        0        1" />
+																	<body name="ma_5"
+																		pos="0.0 0.0 0.08"
+																		euler="0 0 0">
+																		<geom name="ma_5" mesh="ma"
+																			material="ma"
+																			rgba="0.0 0.5 0.0 1"
+																			contype="8"
+																			conaffinity="8" />
+																		<inertial
+																			pos="0        0        0"
+																			mass="0.2" />
+																		<body name="ax_5"
+																			pos="0.0 0.0 0.0">
+																			<geom name="ax_5"
+																				type="mesh"
+																				mesh="ax"
+																				rgba="0.5 0.5 0.7 1"
+																				contype="16"
+																				conaffinity="16" />
+																			<inertial
+																				pos="0        0        0"
+																				mass="0.02" />
+																			<joint name="axis1_5"
+																				axis="1        0        0" />
+																			<body name="mb_5"
+																				pos="0.0 0.0 0.0">
+																				<geom name="mb_5"
+																					type="mesh"
+																					mesh="mb"
+																					material="mb"
+																					rgba="0.0 0.5 0.0 1"
+																					contype="32"
+																					conaffinity="32" />
+																				<inertial
+																					pos="0        0        0"
+																					mass="0.2" />
+																				<joint
+																					name="axis2_5"
+																					axis="0        0        1" />
+																				<body name="ma_6"
+																					pos="0.0 0.0 0.08"
+																					euler="0 0 0">
+																					<geom
+																						name="ma_6"
+																						mesh="ma"
+																						material="ma"
+																						rgba="0.5 0.0 0.0 1"
+																						contype="8"
+																						conaffinity="8" />
+																					<inertial
+																						pos="0        0        0"
+																						mass="0.2" />
+																					<body
+																						name="ax_6"
+																						pos="0.0 0.0 0.0">
+																						<geom
+																							name="ax_6"
+																							type="mesh"
+																							mesh="ax"
+																							rgba="0.5 0.5 0.7 1"
+																							contype="16"
+																							conaffinity="16" />
+																						<inertial
+																							pos="0        0        0"
+																							mass="0.02" />
+																						<joint
+																							name="axis1_6"
+																							axis="1        0        0" />
+																						<body
+																							name="mb_6"
+																							pos="0.0 0.0 0.0">
+																							<geom
+																								name="mb_6"
+																								type="mesh"
+																								mesh="mb"
+																								material="mb"
+																								rgba="0.5 0.0 0.0 1"
+																								contype="32"
+																								conaffinity="32" />
+																							<inertial
+																								pos="0        0        0"
+																								mass="0.2" />
+																							<joint
+																								name="axis2_6"
+																								axis="0        0        1" />
+																							<body
+																								name="ma_7"
+																								pos="0.0 0.0 0.08"
+																								euler="0 0 0">
+																								<geom
+																									name="ma_7"
+																									mesh="ma"
+																									material="ma"
+																									rgba="0.0 0.5 0.0 1"
+																									contype="8"
+																									conaffinity="8" />
+																								<inertial
+																									pos="0        0        0"
+																									mass="0.2" />
+																								<body
+																									name="ax_7"
+																									pos="0.0 0.0 0.0">
+																									<geom
+																										name="ax_7"
+																										type="mesh"
+																										mesh="ax"
+																										rgba="0.5 0.5 0.7 1"
+																										contype="16"
+																										conaffinity="16" />
+																									<inertial
+																										pos="0        0        0"
+																										mass="0.02" />
+																									<joint
+																										name="axis1_7"
+																										axis="1        0        0" />
+																									<body
+																										name="mb_7"
+																										pos="0.0 0.0 0.0">
+																										<geom
+																											name="mb_7"
+																											type="mesh"
+																											mesh="mb"
+																											material="mb"
+																											rgba="0.0 0.5 0.0 1"
+																											contype="32"
+																											conaffinity="32" />
+																										<inertial
+																											pos="0        0        0"
+																											mass="0.2" />
+																										<joint
+																											name="axis2_7"
+																											axis="0        0        1" />
+																									</body>
+																								</body>
+																							</body>
+																						</body>
+																					</body>
+																				</body>
+																			</body>
+																		</body>
+																	</body>
+																</body>
+															</body>
+														</body>
+													</body>
+												</body>
+											</body>
+										</body>
+									</body>
+								</body>
+							</body>
+						</body>
+					</body>
+				</body>
+			</body>
+		</body>
+	</worldbody>
+	<actuator>
+		<position name="motor1_0"	joint="axis1_0"		kp="1000"/>
+		<velocity name="motor_vel_1_0"	joint="axis1_0"		kv="10"/>
+		<position name="motor2_0"	joint="axis2_0" kp="1000"/>
+		<velocity name="motor_vel_2_0"	joint="axis2_0"		kv="10"/>
+		<position name="motor1_1"	joint="axis1_1"		kp="1000"/>
+		<velocity name="motor_vel_1_1"	joint="axis1_1"		kv="10"/>
+		<position name="motor2_1"	joint="axis2_1"		kp="1000"/>
+		<velocity name="motor_vel_2_1"	joint="axis2_1"		kv="10"/>
+		<position name="motor1_2"	joint="axis1_2"		kp="1000"/>
+		<velocity name="motor_vel_1_2"	joint="axis1_2"		kv="10"/>
+		<position name="motor2_2"	joint="axis2_2"		kp="1000"/>
+		<velocity name="motor_vel_2_2"	joint="axis2_2"		kv="10"/>
+		<position name="motor1_3"	joint="axis1_3"		kp="1000"/>
+		<velocity name="motor_vel_1_3"	joint="axis1_3"		kv="10"/>
+		<position name="motor2_3"	joint="axis2_3"		kp="1000"/>
+		<velocity name="motor_vel_2_3"	joint="axis2_3"		kv="10"/>
+		<position name="motor1_4"	joint="axis1_4"		kp="1000"/>
+		<velocity name="motor_vel_1_4"	joint="axis1_4"		kv="10"/>
+		<position name="motor2_4"	joint="axis2_4" kp="1000"/>
+		<velocity name="motor_vel_2_4"	joint="axis2_4"		kv="10"/>
+		<position name="motor1_5"	joint="axis1_5"		kp="1000"/>
+		<velocity name="motor_vel_1_5"	joint="axis1_5"		kv="10"/>
+		<position name="motor2_5"	joint="axis2_5"		kp="1000"/>
+		<velocity name="motor_vel_2_5"	joint="axis2_5"		kv="10"/>
+		<position name="motor1_6"	joint="axis1_6"		kp="1000"/>
+		<velocity name="motor_vel_1_6"	joint="axis1_6"		kv="10"/>
+		<position name="motor2_6"	joint="axis2_6"		kp="1000"/>
+		<velocity name="motor_vel_2_6"	joint="axis2_6"		kv="10"/>
+		<position name="motor1_7"	joint="axis1_7"		kp="1000"/>
+		<velocity name="motor_vel_1_7"	joint="axis1_7"		kv="10"/>
+		<position name="motor2_7"	joint="axis2_7"		kp="1000"/>
+		<velocity name="motor_vel_2_7"	joint="axis2_7"		kv="10"/>
+	</actuator>
+</mujoco>
